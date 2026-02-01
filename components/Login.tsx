@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Shield, User, Lock, ArrowRight, Info, ChevronDown } from 'lucide-react';
+import { Shield, User, Lock, ArrowRight, ChevronDown, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   onLogin: (role: 'safety' | 'guest', name: string) => void;
@@ -19,105 +19,107 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   const handleSafetyLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const user = safetyUsers.find(u => u.name === selectedUser);
-    
     if (user && password === user.password) {
       onLogin('safety', user.name);
     } else {
-      alert('كلمة المرور غير صحيحة لهذا المستخدم');
+      alert('كلمة المرور غير صحيحة');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4 py-12 relative overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-0 -left-20 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+      <div className="max-w-md w-full space-y-8 bg-white/95 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl relative z-10 border border-white/20">
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-yellow-500 rounded-2xl flex items-center justify-center shadow-lg mb-4">
-            <Shield className="h-10 w-10 text-white" />
+          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-yellow-500/30 mb-6 rotate-3">
+            <Shield className="h-10 w-10 text-slate-900" />
           </div>
-          <h2 className="text-3xl font-extrabold text-slate-900">نظام قسم السلامة - شركة مسبك الرياض</h2>
-          <p className="mt-2 text-sm text-slate-500">منصة رصد ومتابعة مخالفات السلامة</p>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">نظام إدارة السلامة</h2>
+          <p className="mt-2 text-sm text-slate-500 font-bold uppercase tracking-widest">شركة مسبك الرياض</p>
         </div>
 
-        <div className="flex bg-slate-100 p-1 rounded-xl">
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl">
           <button
             onClick={() => setActiveTab('safety')}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'safety' ? 'bg-white text-yellow-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+            className={`flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
+              activeTab === 'safety' ? 'bg-white text-slate-900 shadow-md' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
             <Shield className="w-4 h-4" /> موظف سلامة
           </button>
           <button
             onClick={() => setActiveTab('guest')}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'guest' ? 'bg-white text-yellow-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+            className={`flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
+              activeTab === 'guest' ? 'bg-white text-slate-900 shadow-md' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
-            <User className="w-4 h-4" /> دخول ضيف
+            <User className="w-4 h-4" /> دخول زائر
           </button>
         </div>
 
         {activeTab === 'safety' ? (
           <form className="mt-8 space-y-6" onSubmit={handleSafetyLogin}>
-            <div className="rounded-md shadow-sm space-y-4">
-              <div className="relative">
-                <label className="text-xs font-bold text-slate-400 mr-2 mb-1 block">اختر الموظف</label>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-xs font-black text-slate-400 mr-2 block uppercase tracking-wider">اسم الموظف</label>
                 <div className="relative">
-                  <User className="absolute right-3 top-3.5 h-4 w-4 text-slate-400 z-10" />
+                  <User className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                   <select
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    className="appearance-none rounded-xl relative block w-full px-10 py-3 border border-slate-200 text-slate-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm bg-slate-50"
+                    className="appearance-none rounded-2xl block w-full pr-12 pl-10 py-4 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-yellow-500/50 outline-none transition-all font-bold text-sm bg-slate-50"
                   >
-                    {safetyUsers.map(u => (
-                      <option key={u.name} value={u.name}>{u.name}</option>
-                    ))}
+                    {safetyUsers.map(u => <option key={u.name} value={u.name}>{u.name}</option>)}
                   </select>
-                  <ChevronDown className="absolute left-3 top-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+                  <ChevronDown className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 </div>
               </div>
-              <div className="relative">
-                <label className="text-xs font-bold text-slate-400 mr-2 mb-1 block">كلمة المرور</label>
+
+              <div className="space-y-2">
+                <label className="text-xs font-black text-slate-400 mr-2 block uppercase tracking-wider">كلمة المرور</label>
                 <div className="relative">
-                  <Lock className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
+                  <Lock className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none rounded-xl relative block w-full px-10 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm bg-slate-50"
+                    className="rounded-2xl block w-full pr-12 pl-4 py-4 border border-slate-200 placeholder-slate-400 text-slate-900 focus:ring-2 focus:ring-yellow-500/50 outline-none transition-all font-bold text-sm bg-slate-50"
                     placeholder="••••••••"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-500 bg-blue-50 p-3 rounded-lg">
-              <div className="flex items-center gap-2">
-                <Info className="w-4 h-4 text-blue-500" />
-                <span>كلمة المرور الخاصة بـ {selectedUser} مطلوبة.</span>
-              </div>
-            </div>
-
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all active:scale-95"
+              className="group relative w-full flex justify-center items-center gap-3 py-4 border border-transparent text-sm font-black rounded-2xl text-slate-900 bg-yellow-500 hover:bg-yellow-400 shadow-xl shadow-yellow-500/20 transition-all active:scale-[0.98]"
             >
-              تسجيل الدخول
-              <ArrowRight className="mr-2 h-5 w-5" />
+              دخول آمن للنظام
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
         ) : (
-          <div className="mt-8 space-y-6 animate-in fade-in duration-300">
-            <p className="text-center text-slate-600 text-sm leading-relaxed">
-              بصفتك ضيفاً، يمكنك استعراض جميع مخالفات السلامة في المصنع والمشاركة بكتابة التعليقات والاقتراحات. لن تتاح لك ميزات التقارير أو تعديل البيانات.
-            </p>
+          <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-blue-50/50 p-6 rounded-3xl border border-blue-100 space-y-4">
+               <div className="flex items-start gap-3">
+                 <CheckCircle2 className="w-5 h-5 text-blue-500 mt-0.5" />
+                 <p className="text-xs text-blue-800 font-bold leading-relaxed">استعراض سجل المخالفات الميداني لحظة بلحظة.</p>
+               </div>
+               <div className="flex items-start gap-3">
+                 <CheckCircle2 className="w-5 h-5 text-blue-500 mt-0.5" />
+                 <p className="text-xs text-blue-800 font-bold leading-relaxed">المشاركة بكتابة الملاحظات والتعليقات البناءة.</p>
+               </div>
+            </div>
             <button
               onClick={() => onLogin('guest', 'زائر المصنع')}
-              className="group relative w-full flex justify-center py-3 px-4 border border-slate-200 text-sm font-bold rounded-xl text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all active:scale-95"
+              className="group w-full flex justify-center items-center gap-3 py-4 border-2 border-slate-900 text-sm font-black rounded-2xl text-slate-900 hover:bg-slate-900 hover:text-white transition-all active:scale-[0.98]"
             >
-              دخول كضيف
-              <ArrowRight className="mr-2 h-5 w-5" />
+              متابعة كزائر
+              <ArrowRight className="h-5 w-5" />
             </button>
           </div>
         )}
