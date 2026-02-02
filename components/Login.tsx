@@ -8,11 +8,11 @@ interface Props {
 
 const Login: React.FC<Props> = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState<'safety' | 'guest'>('safety');
-  const [selectedUser, setSelectedUser] = useState('فواز الرويلي');
+  const [selectedUser, setSelectedUser] = useState('فواز المطرفي');
   const [password, setPassword] = useState('');
 
   const safetyUsers = [
-    { name: 'فواز الرويلي', password: 'fawaz@2026' },
+    { name: 'فواز المطرفي', password: 'fawaz@2026' },
     { name: 'فيصل القوصي', password: 'faisal@2026' }
   ];
 
