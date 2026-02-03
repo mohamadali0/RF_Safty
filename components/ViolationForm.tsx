@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { Camera, MapPin, Building, AlertTriangle, FileText, Send, Sparkles, Loader2 } from 'lucide-react';
+import { Camera, MapPin, Building, AlertTriangle, FileText, Send, Sparkles, Loader2, Image as ImageIcon, X } from 'lucide-react';
 import { Department, Category, Severity, Violation } from '../types';
 import { analyzeViolation } from '../services/geminiService';
 
@@ -12,7 +12,6 @@ interface Props {
 
 /**
  * ViolationForm Component for creating and editing safety violations.
- * Uses React.FC and other React namespace types, requiring React import.
  */
 const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData }) => {
   const [image, setImage] = useState<string | null>(initialData?.imageUrl || null);
@@ -29,7 +28,7 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
-   * Handle image capture/selection using React.ChangeEvent.
+   * Handle image capture/selection.
    */
   const handleCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,7 +43,7 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
 
   const handleAiAnalyze = async () => {
     if (!image || !description) {
-      alert("يرجى التقاط صورة وكتابة وصف أولاً ليتمكن الذكاء الاصطناعي من التحليل");
+      alert("يرجى التقاط صورة أو اختيارها وكتابة وصف أولاً ليتمكن الذكاء الاصطناعي من التحليل");
       return;
     }
     setIsAnalyzing(true);
@@ -62,15 +61,12 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
     }
   };
 
-  /**
-   * Handle form submission using React.FormEvent.
-   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
 
     if (!image) {
-      alert("يجب التقاط صورة للمخالفة");
+      alert("يجب إرفاق صورة للمخالفة (كاميرا أو استوديو)");
       return;
     }
 
@@ -106,28 +102,34 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
           <AlertTriangle className="w-6 h-6" />
           {initialData ? 'تعديل مخالفة' : 'تسجيل مخالفة جديدة'}
         </h2>
-        <button type="button" onClick={onCancel} className="text-white hover:bg-blue-700 rounded-full p-1">
-          ✕
+        <button type="button" onClick={onCancel} className="text-white hover:bg-blue-700 rounded-full p-1 transition-colors">
+          <X className="w-6 h-6" />
         </button>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
         <div 
-          className="relative aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 transition-colors" 
+          className="relative aspect-video rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 hover:bg-blue-50/30 transition-all group" 
           onClick={() => fileInputRef.current?.click()}
         >
           {image ? (
-            <img src={image} className="absolute inset-0 w-full h-full object-cover" alt="Captured violation" />
+            <img src={image} className="absolute inset-0 w-full h-full object-cover" alt="Selected violation" />
           ) : (
-            <>
-              <Camera className="w-12 h-12 text-slate-300 mb-2" />
-              <p className="text-slate-400 text-sm font-bold">اضغط لالتقاط أو اختيار صورة</p>
-            </>
+            <div className="text-center space-y-3">
+              <div className="flex items-center justify-center gap-4">
+                <Camera className="w-12 h-12 text-slate-300 group-hover:text-blue-400 transition-colors" />
+                <div className="h-8 w-px bg-slate-200"></div>
+                <ImageIcon className="w-12 h-12 text-slate-300 group-hover:text-blue-400 transition-colors" />
+              </div>
+              <div>
+                <p className="text-slate-500 text-sm font-black">اضغط لالتقاط صورة أو الاختيار من الاستوديو</p>
+                <p className="text-slate-400 text-[10px] mt-1 font-bold">يدعم ملفات الصور (JPG, PNG)</p>
+              </div>
+            </div>
           )}
           <input 
             type="file" 
             accept="image/*" 
-            capture="environment" 
             ref={fileInputRef} 
             onChange={handleCapture} 
             className="hidden" 
@@ -136,13 +138,13 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+            <label className="text-xs font-black text-slate-500 flex items-center gap-2 uppercase tracking-widest">
               <MapPin className="w-4 h-4 text-blue-500" /> مكان المخالفة
             </label>
             <input 
               type="text" 
               required
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-bold text-sm"
               placeholder="مثال: المستودع الشمالي - بوابة 3"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
@@ -150,11 +152,11 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+            <label className="text-xs font-black text-slate-500 flex items-center gap-2 uppercase tracking-widest">
               <Building className="w-4 h-4 text-blue-500" /> القسم المسؤول
             </label>
             <select 
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
               value={department}
               onChange={(e) => setDepartment(e.target.value as Department)}
             >
@@ -163,11 +165,11 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+            <label className="text-xs font-black text-slate-500 flex items-center gap-2 uppercase tracking-widest">
               <AlertTriangle className="w-4 h-4 text-blue-500" /> التصنيف
             </label>
             <select 
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
             >
@@ -176,11 +178,11 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+            <label className="text-xs font-black text-slate-500 flex items-center gap-2 uppercase tracking-widest">
               <AlertTriangle className="w-4 h-4 text-blue-500" /> مستوى الخطورة
             </label>
             <select 
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
               value={severity}
               onChange={(e) => setSeverity(e.target.value as Severity)}
             >
@@ -190,13 +192,13 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+          <label className="text-xs font-black text-slate-500 flex items-center gap-2 uppercase tracking-widest">
             <FileText className="w-4 h-4 text-blue-500" /> وصف تفصيلي للمخالفة
           </label>
           <textarea 
             required
             rows={3}
-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none font-bold text-sm"
             placeholder="اكتب ما الذي حدث بالضبط..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -205,10 +207,10 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
 
         {aiAdvice && (
           <div className="p-4 bg-purple-50 border border-purple-100 rounded-xl animate-in fade-in">
-            <p className="text-purple-800 text-xs font-black flex items-center gap-2 mb-1 uppercase tracking-wider">
+            <p className="text-purple-800 text-[10px] font-black flex items-center gap-2 mb-1 uppercase tracking-widest">
               <Sparkles className="w-4 h-4" /> توصية الذكاء الاصطناعي:
             </p>
-            <p className="text-purple-700 text-sm leading-relaxed font-medium">{aiAdvice}</p>
+            <p className="text-purple-700 text-xs leading-relaxed font-bold">{aiAdvice}</p>
           </div>
         )}
 
@@ -216,7 +218,7 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
           <button 
             type="submit" 
             disabled={isSubmitting}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-200"
+            className="flex-[2] bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-200"
           >
             {isSubmitting ? (
               <>
@@ -235,7 +237,7 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
             type="button"
             onClick={handleAiAnalyze}
             disabled={isAnalyzing || isSubmitting}
-            className="px-6 py-4 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-black rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-200"
+            className="flex-1 px-6 py-4 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-black rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-200"
           >
             {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
             تحليل ذكي
