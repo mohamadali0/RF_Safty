@@ -9,17 +9,23 @@ export enum Severity {
 export enum Department {
   PRODUCTION = 'الإنتاج',
   MAINTENANCE = 'الصيانة',
-  LOGISTICS = 'الخدمات اللوجستية',
+  LOGISTICS = 'المستودعات',
   QUALITY = 'الجودة',
   ADMINISTRATION = 'الإدارة'
+  Project Mangment = 'إدارة المشاريع'
 }
 
 export enum Category {
   PPE = 'أدوات الوقاية الشخصية',
-  EQUIPMENT = 'سلامة المعدات',
+  EQUIPMENT = 'سلامة المعدات والأدوات',
   ENVIRONMENT = 'نظافة البيئة والترتيب',
   FIRE_SAFETY = 'السلامة من الحريق',
-  ELECTRICAL = 'المخاطر الكهربائية'
+ Accedent = ' حادث وشيك' 
+ chemechal = ' المخاطر الكيميائية'
+ ELECTRICAL = 'المخاطر الكهربائية'
+ NOTE = ' ملاحظة ايجابية'
+ِACTION = ' سلوك غير آمن'
+POSITION = ' حالة غير آمنة '
 }
 
 export interface Comment {
