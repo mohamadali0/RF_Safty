@@ -74,11 +74,14 @@ const App: React.FC = () => {
   };
 
   const handleAddComment = async (violationId: string, text: string) => {
+    // ضبط الوقت ليكون GMT+3 (توقيت الرياض)
+    const timestamp = new Date().toLocaleTimeString('ar-EG', { timeZone: 'Asia/Riyadh' });
+
     const newComment: Comment = {
       id: Date.now().toString(),
       author: userName,
       text,
-      timestamp: new Date().toLocaleTimeString('ar-EG')
+      timestamp: timestamp
     };
     await db.addComment(violationId, newComment);
     setTimeout(() => loadData(false), 1500);

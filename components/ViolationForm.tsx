@@ -72,10 +72,13 @@ const ViolationForm: React.FC<Props> = ({ onAddViolation, onCancel, initialData 
 
     setIsSubmitting(true);
     
+    // ضبط الوقت ليكون GMT+3 (توقيت الرياض)
+    const timestamp = new Date().toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh' });
+
     const violationData: Violation = {
       id: initialData?.id || "",
       imageUrl: image,
-      date: initialData?.date || new Date().toLocaleString('ar-EG'),
+      date: initialData?.date || timestamp,
       location,
       department,
       category,

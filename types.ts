@@ -7,12 +7,13 @@ export enum Severity {
 }
 
 export enum Department {
-  PRODUCTION = 'الإنتاج',
+  PRODUCTION = 'الانتاج',
   MAINTENANCE = 'الصيانة',
-  LOGISTICS = 'المستودعات',
+  WAREHOUSE = 'المستودعات',
   QUALITY = 'الجودة',
-  ADMINISTRATION = 'الإدارة'
-  Project Mangment = 'إدارة المشاريع'
+  ADMINISTRATION = 'الادارة',
+  PROJECTS = 'ادارة المشاريع',
+  OTHER = 'غير ذلك'
 }
 
 export enum Category {
@@ -20,12 +21,12 @@ export enum Category {
   EQUIPMENT = 'سلامة المعدات والأدوات',
   ENVIRONMENT = 'نظافة البيئة والترتيب',
   FIRE_SAFETY = 'السلامة من الحريق',
- Accedent = ' حادث وشيك' 
- chemechal = ' المخاطر الكيميائية'
- ELECTRICAL = 'المخاطر الكهربائية'
- NOTE = ' ملاحظة ايجابية'
-ِACTION = ' سلوك غير آمن'
-POSITION = ' حالة غير آمنة '
+  NEAR_MISS = 'حادث وشيك',
+  CHEMICAL = 'المخاطر الكيميائية',
+  ELECTRICAL = 'المخاطر الكهربائية',
+  POSITIVE = 'ملاحظة ايجابية',
+  UNSAFE_ACT = 'سلوك غير آمن',
+  UNSAFE_CONDITION = 'حالة غير آمنة'
 }
 
 export interface Comment {
