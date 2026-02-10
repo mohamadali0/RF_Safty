@@ -13,9 +13,11 @@ export enum Department {
   QUALITY = 'الجودة',
   ADMINISTRATION = 'الادارة',
   PROJECTS = 'ادارة المشاريع',
+  IT = 'تقنية المعلومات',
+  HR = 'الموارد البشرية',
+  SUPPORT = 'الخدمات المساندة',
   OTHER = 'غير ذلك'
 }
-
 export enum Category {
   PPE = 'أدوات الوقاية الشخصية',
   EQUIPMENT = 'سلامة المعدات والأدوات',
