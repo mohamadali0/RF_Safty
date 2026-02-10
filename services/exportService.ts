@@ -60,7 +60,6 @@ export const exportViolationToPDF = (violation: Violation) => {
             <div class="meta-item"><span class="label">القسم المسؤول</span><span class="value">${violation.department}</span></div>
             <div class="meta-item"><span class="label">مستوى الخطورة</span><span class="value">${violation.severity}</span></div>
             <div class="meta-item"><span class="label">نوع الخطورة</span><span class="value">${violation.category}</span></div>
-            <div class="meta-item"><span class="label">الموظف المسؤول</span><span class="value">${violation.reporter}</span></div>
           </div>
 
           <div class="section-title">وصف المخالفة الميداني</div>
